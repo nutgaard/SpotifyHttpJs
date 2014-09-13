@@ -1,4 +1,5 @@
 (function($){
+	var versionUrl = 'https://tpcaahshvs.spotilocal.com:4371/service/version.json?service=remote&ref=&cors=';
     var url = '';
     url += 'https://kcifscozyq.spotilocal.com:4371/remote/'
     url += '${action}.json';
@@ -12,7 +13,9 @@
     	'pause': '&pause=${pause}'
     }
 	
-	function Spotify() {}
+	function Spotify() {
+		
+	}
 
 	$.extend(Spotify.prototype, {
 		status: function(returnAfter){
@@ -29,24 +32,17 @@
 			return $.get(req);
 		},
 		togglePause: function(){
-			var d = $.Deferred();
-			this.status(1).done(function(currentStatus){
-				var req = createUrl('pause', {
-					pause: currentStatus.playing
+			var state = this.status(1),
+				resp = state.then(function(currentStatus){
+					var req = createUrl('pause', {
+						pause: currentStatus.playing
+					});
+					return $.get(req)
 				});
-				return $.get(req).done(function(data){
-					d.resolve(data);
-				}).error(function(data){
-					d.reject(data);
-				});
-			});
-			return d.promise();
+			return resp;
 		},
-		unpause: function(){
-			var req = createUrl('pause',{
-				pause: false
-			});
-			return $.get(req);
+		version: function(){
+			return $.get(versionUrl);
 		}
 	});
 
