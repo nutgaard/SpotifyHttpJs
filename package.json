@@ -1,0 +1,17 @@
+{
+  "name": "spotifyJS",
+  "version": "0.0.1",
+  "description": "A simple wrapper for controller spotify from your browser",
+  "main": "spotify.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "spotify",
+    "wrapper",
+    "browser",
+    "http"
+  ],
+  "author": "Nicklas Utgaard",
+  "license": "MIT"
+}
