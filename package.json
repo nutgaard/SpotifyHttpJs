@@ -1,6 +1,6 @@
 {
   "name": "spotifyJS",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A simple wrapper for controller spotify from your browser",
   "homepage": "https://github.com/nutgaard/SpotifyHttpJs",
   "bugs": "https://github.com/nutgaard/SpotifyHttpJs/issues",
