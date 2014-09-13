@@ -1,0 +1,27 @@
+{
+  "name": "spotifyJS",
+  "version": "0.0.1",
+  "homepage": "https://github.com/nutgaard/SpotifyHttpJs",
+  "authors": [
+    "Nicklas Utgaard <nutgaard@gmail.com>"
+  ],
+  "description": "A simple wrapper for controller spotify from your browser",
+  "main": "spotify.js",
+  "keywords": [
+    "spotify",
+    "wrapper",
+    "browser",
+    "http"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1"
+  }
+}
