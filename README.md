@@ -1,4 +1,4 @@
 SpotifyHttpJs
 =============
 
-A simple wrapper for Spotify's internal HTTP server. 
+A simple wrapper for Spotify's internal HTTP server.

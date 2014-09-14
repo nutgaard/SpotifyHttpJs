@@ -10,27 +10,47 @@
 	"use strict";
     return (function($){
 		var versionUrl = 'https://tpcaahshvs.spotilocal.com:4371/service/version.json?service=remote&ref=&cors=';
+		var oauthTokenUrl = 'http://open.spotify.com/token';
+
+    	var urlTemplate = '';
+    	urlTemplate += 'https://kcifscozyq.spotilocal.com:4371/remote/'
+    	urlTemplate += '${action}.json';
+    	urlTemplate += '?csrf=${csrf}&oauth=${oauth}';
+    	urlTemplate += '${actionCtx}';
+    	urlTemplate += '&ref=&cors=';
+
     	var url = '';
-    	url += 'https://kcifscozyq.spotilocal.com:4371/remote/'
-    	url += '${action}.json';
-    	url += '?csrf=2c171e8385b456cc4cea25b8d2ca6160&oauth=NAowChgKB1Nwb3RpZnkSABoGmAEByAEBJbkDFVQSFItVwlg3dN5e40hG83u6Vx5ZIJB_';
-    	url += '${actionCtx}';
-    	url += '&ref=&cors=';
 
 	    var contexts = {
     		'status': '&returnon=login%2Clogout%2Cplay%2Cpause%2Cerror%2Cap&returnafter=${returnAfter}',
     		'play': '&uri=${uri}&context=${uri}',
     		'pause': '&pause=${pause}'
     	};
+
 	
-		function Spotify() {}
+		function Spotify(csrf) {
+			if (typeof csrf === 'undefined'){
+				throw 'Must define csrf token';
+			}
+			getOAuthToken().then(function(data){
+				var tokens = {
+					csrf: csrf,
+					oauth: data['t']
+				}
+				url = template(urlTemplate, tokens);
+				this.status(1).then(function(d){
+					if (d.hasOwnProperty('error')){
+						throw d.error.message;
+					}
+				});
+			}.bind(this));
+		}
 
 		$.extend(Spotify.prototype, {
 			status: function(returnAfter){
 				var req = createUrl('status', {
 					returnAfter: returnAfter
-				});
-				console.log('url', req);
+				});		
 				return $.get(req);
 			},
 			play: function(uri){
@@ -53,6 +73,12 @@
 				return $.get(versionUrl);
 			}
 		});
+		var getOAuthToken = function(){
+			return $.ajax({
+	  			url: "http://jsonp.guffa.com/Proxy.ashx?url="+encodeURI(oauthTokenUrl),	
+	  			dataType: "jsonp"
+			});
+		};
 
 		var createUrl = function(action, ctx){
 			var ctxTmpl = contexts[action];
@@ -65,6 +91,9 @@
 		};
 		var template = function(template, data) {
     		return template.trim().replace(/\$\{(\d+|[a-z\d]+)\}/gi, function(match, backref) {
+    			if (typeof data[backref] === 'undefined'){
+    				return '${'+backref+'}';
+    			}
 				return data[backref];
 	    	});
     	};
