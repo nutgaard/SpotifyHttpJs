@@ -2,7 +2,98 @@
 	<head>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 		<script src="spotify.js"></script>
+		<style>
+			body > h1 {
+				text-align: center;
+			}
+			section {
+				width: 50%;
+				display: inline-block;
+				float: left;
+				padding-left: 0.5rem;
+				padding-right: 0.5rem;
+				box-sizing: border-box;
+			}
+			section:last-child {
+				padding-top: 4rem;
+				height: 250px;
+			}
+			section > pre {
+				white-space: pre-wrap;
+				border: 1px solid black;
+				background-color: #CCC;
+				padding: 0.4rem;
+			}
+			section > textarea {
+				width: 100%;
+				height: 100%
+			}
+
+		</style>
 	</head>
 	<body>
+		<h1>SpotifyHTTPJS</h1>
+
+		<section>
+			<label for="csrf">Your CSRF token:</label>
+			<input type="text" name="csrf" id="csrf" placeholder="csrf token" />
+			<button id="start">Start</button>
+			<span id="feedback"></span>
+
+			<p>To get your token, run this cURL command in your terminal window:</p>
+			<pre>
+curl "https://tpcaahshvs.spotilocal.com:4371/simplecsrf/token.json?&ref=&cors=" -H "Pragma: no-cache" -H "Origin: https://embed.spotify.com" -H "Accept-Encoding: gzip,deflate" -H "Accept-Language: en-US,en;q=0.8,da;q=0.6,nb;q=0.4" -H "User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2156.0 Safari/537.36" -H "Accept: */*" -H "Referer: https://embed.spotify.com/?uri=spotify:track:4bz7uB4edifWKJXSDxwHcs" -H "Connection: keep-alive" -H "Cache-Control: no-cache" --compressed
+			</pre>
+
+			<article>
+				<button id="status" disabled="disabled">Status</button>
+				<button id="play" disabled="disabled">Play</button>
+				<button id="pause" disabled="disabled">TogglePause</button>
+				<button id="version" disabled="disabled">Version</button>
+			</article>
+		</section>
+		<section>
+			<textarea id="output"></textarea>
+		</section>
+		<script type="text/javascript">
+			var spotify = undefined;
+			$(document).ready(function(){
+				$('#status').on('click', status);
+				$('#play').on('click', play);
+				$('#pause').on('click', pause);
+				$('#version').on('click', version);
+				$('#start').on('click', function(){
+					Spotify.start($('#csrf').val(), function(ok, instance, msg){
+						console.log(arguments);
+						if (ok){
+							spotify = instance;
+							$('article > button').attr("disabled", false);
+							$('#feedback').html('started')
+						}
+					});
+
+				});
+			});
+			function status(){
+				spotify.status(1).done(function(d){
+					$('#output').val(JSON.stringify(d));
+				});	
+			}
+			function play(){
+				spotify.play('spotify:track:6JEK0CvvjDjjMUBFoXShNZ').done(function(d){
+					$('#output').val(JSON.stringify(d));
+				});
+			}
+			function pause(){
+				spotify.togglePause().done(function(d){
+					$('#output').val(JSON.stringify(d));
+				});	
+			}
+			function version(){
+				spotify.version().done(function(d){
+					$('#output').val(JSON.stringify(d));
+				});	
+			}
+		</script>
 	</body>
 </html>

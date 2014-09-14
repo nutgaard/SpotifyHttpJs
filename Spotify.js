@@ -27,7 +27,8 @@
     		'pause': '&pause=${pause}'
     	};
 
-	
+		var readyH = $.Deferred();	
+
 		function Spotify(csrf) {
 			if (typeof csrf === 'undefined'){
 				throw 'Must define csrf token';
@@ -40,10 +41,17 @@
 				url = template(urlTemplate, tokens);
 				this.status(1).then(function(d){
 					if (d.hasOwnProperty('error')){
+						readyH.reject(false, undefined, d.error.message);
 						throw d.error.message;
 					}
-				});
+					readyH.resolve(true, this, 'OK');
+					console.log('resolved');
+				}.bind(this));
 			}.bind(this));
+		}
+		Spotify.start = function(token, cb){
+			var instance = new Spotify(token);
+			instance.ready().done(cb).fail(cb);
 		}
 
 		$.extend(Spotify.prototype, {
@@ -71,6 +79,9 @@
 			},
 			version: function(){
 				return $.get(versionUrl);
+			},
+			ready: function(){
+				return readyH.promise();
 			}
 		});
 		var getOAuthToken = function(){
