@@ -17,17 +17,10 @@ and run this javascript in your console (Press F12).
 $.get('https://tpcaahshvs.spotilocal.com:4371/simplecsrf/token.json?&ref=&cors=').done(function(d){prompt('This is your token', d.token)});	
 ```
 
-The same script can be executed directly in the url bar as well:
+or execute it directly in the url bar:
 
 ```
 javascript:$.get('https://tpcaahshvs.spotilocal.com:4371/simplecsrf/token.json?&ref=&cors=').done(function(d){prompt('This is your token', d.token)});
 ```
 
-
-When you got your csrf token handy you are ready to test the library.
-```Javascript
-var spotify = new Spotify(csrf_token);
-spotify.play('spotify:track:0iTlGLAhCU7jojPx7zh4ap')
-spotify.togglePause();
-spotify.togglePause();
-```
+To see how to use the library please take a look at the index.html file.
