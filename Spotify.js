@@ -51,6 +51,7 @@
             }.bind(this));
         }
         Spotify.start = function(token, cb){
+            readyH = $.Deferred();
             var instance = new Spotify(token);
             return instance.ready().done(cb).fail(cb);
         }
