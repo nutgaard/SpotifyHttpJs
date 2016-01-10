@@ -88,7 +88,7 @@
         });
         var getOAuthToken = function(){
             return $.ajax({
-                url: "http://jsonp.guffa.com/Proxy.ashx?url="+encodeURI(oauthTokenUrl),
+                url: "https://jsonp.afeld.me/?url=https%3A%2F%2Fopen.spotify.com%2Ftoken",
                 dataType: "jsonp"
             });
         };
